@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RAM Insight | Reliability · Availability · Maintainability</title>
+<title>RAM Insight | Auto-Classified Equipment Reliability Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -12,126 +12,122 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   :root{
-    --bg:#f4f6fa;
-    --panel:#ffffff;
-    --border:#e3e8f0;
-    --text:#1c2434;
-    --text-soft:#5b6577;
-    --primary:#2f6fed;
-    --primary-dark:#1d4ed8;
-    --primary-soft:#eaf1ff;
-    --good:#0f9d6b;
-    --good-soft:#e6f8f1;
-    --warn:#e08a1e;
-    --warn-soft:#fdf1e0;
-    --bad:#e0403f;
-    --bad-soft:#fde9e9;
-    --shadow: 0 1px 2px rgba(20,30,60,.04), 0 8px 24px -12px rgba(20,30,60,.10);
-    --radius: 14px;
+    --bg:#f4f6fa; --panel:#fff; --border:#e3e8f0; --text:#1c2434; --text-soft:#5b6577;
+    --primary:#2f6fed; --primary-dark:#1d4ed8; --primary-soft:#eaf1ff;
+    --rel:#2f6fed; --rel-soft:#eaf1ff;
+    --ava:#0f9d6b; --ava-soft:#e6f8f1;
+    --mnt:#e08a1e; --mnt-soft:#fdf1e0;
+    --bad:#e0403f; --bad-soft:#fde9e9;
+    --shadow:0 1px 2px rgba(20,30,60,.04),0 8px 24px -12px rgba(20,30,60,.10);
+    --radius:14px;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;}
-  a{color:inherit;}
-  .wrap{max-width:1280px;margin:0 auto;padding:0 24px;}
-
-  /* Header */
-  header.topbar{background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
-  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;flex-wrap:wrap;}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.2px;}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 24px;}
+  header.topbar{background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30;}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:14px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;}
   .brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary),#6ea0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;}
-  .brand small{display:block;font-weight:500;color:var(--text-soft);font-size:11px;letter-spacing:.4px;}
+  .brand small{display:block;font-weight:500;color:var(--text-soft);font-size:11px;}
   .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-  .btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:9px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
+  .btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:9px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
   .btn:hover{border-color:var(--primary);color:var(--primary-dark);}
   .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
   .btn.primary:hover{background:var(--primary-dark);}
-  .btn.ghost{background:transparent;}
-  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
   input[type=file]{display:none;}
 
-  /* Hero */
-  .hero{padding:28px 0 6px;}
-  .hero h1{font-size:26px;margin:0 0 6px;font-weight:800;}
-  .hero p{color:var(--text-soft);margin:0;font-size:14.5px;max-width:640px;}
-  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--good);background:var(--good-soft);padding:4px 10px;border-radius:20px;margin-top:12px;}
+  .hero{padding:26px 0 6px;}
+  .hero h1{font-size:25px;margin:0 0 6px;font-weight:800;}
+  .hero p{color:var(--text-soft);margin:0;font-size:14px;max-width:700px;line-height:1.6;}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ava);background:var(--ava-soft);padding:4px 10px;border-radius:20px;margin-top:12px;}
   .status-pill.dim{color:var(--text-soft);background:#eef1f6;}
   .status-pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
 
-  /* KPI Cards */
   .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:22px 0;}
   .kpi{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
   .kpi .label{font-size:12px;color:var(--text-soft);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
-  .kpi .target{font-size:11px;color:var(--text-soft);margin-top:2px;}
-  .kpi .value{font-size:30px;font-weight:800;margin:8px 0 2px;}
+  .kpi .value{font-size:28px;font-weight:800;margin:8px 0 2px;}
   .kpi .sub{font-size:12px;color:var(--text-soft);}
-  .kpi.good .value{color:var(--good);}
-  .kpi.warn .value{color:var(--warn);}
-  .kpi.bad .value{color:var(--bad);}
 
-  /* Panels */
   .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
   .panel h2{font-size:15px;margin:0;font-weight:700;}
   .panel .panel-sub{font-size:12.5px;color:var(--text-soft);margin-top:3px;}
   .panel-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
 
+  .ram-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:16px;margin-bottom:22px;align-items:stretch;}
+  @media(max-width:980px){.ram-grid{grid-template-columns:1fr;}}
+  .ram-stats{display:flex;flex-direction:column;gap:10px;justify-content:center;}
+  .ram-stat{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:11px;padding:12px 14px;}
+  .ram-stat .dot{width:12px;height:12px;border-radius:4px;flex-shrink:0;}
+  .ram-stat .rs-name{font-weight:700;font-size:13.5px;flex:1;}
+  .ram-stat .rs-count{font-weight:800;font-size:16px;}
+  .ram-stat .rs-pct{font-size:12px;color:var(--text-soft);width:48px;text-align:right;}
+
   .risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;}
-  .risk-card{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--bad);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);}
-  .risk-card.mttr{border-left-color:var(--warn);}
-  .risk-card .rk-label{font-size:11.5px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:.4px;}
-  .risk-card .rk-name{font-size:17px;font-weight:800;margin:6px 0 2px;}
-  .risk-card .rk-value{font-size:13px;color:var(--text-soft);}
-  .risk-card .rk-note{font-size:12px;color:var(--text-soft);margin-top:8px;line-height:1.5;}
+  .risk-card{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);}
+  .risk-card.b{border-left-color:var(--mnt);}
+  .rk-label{font-size:11.5px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:.4px;}
+  .rk-name{font-size:17px;font-weight:800;margin:6px 0 2px;}
+  .rk-value{font-size:13px;color:var(--text-soft);}
 
-  .grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:22px;align-items:start;}
-  @media(max-width:980px){ .grid-2{grid-template-columns:1fr;} .kpi-grid{grid-template-columns:repeat(2,1fr);} .risk-grid{grid-template-columns:1fr;} }
+  .grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:22px;align-items:start;}
+  @media(max-width:1080px){ .grid-2{grid-template-columns:1fr;} .kpi-grid{grid-template-columns:repeat(2,1fr);} .risk-grid{grid-template-columns:1fr;} }
 
-  .filter-btns{display:flex;gap:6px;flex-wrap:wrap;}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+  .search-input{flex:1;min-width:180px;padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;background:#fbfcfe;}
+  .search-input:focus{outline:none;border-color:var(--primary);background:#fff;}
+  .mini-select{padding:8px 10px;border:1px solid var(--border);border-radius:9px;font-size:12.5px;font-family:inherit;background:#fbfcfe;color:var(--text);}
+  .fbtn-row{display:flex;gap:6px;flex-wrap:wrap;}
   .fbtn{border:1px solid var(--border);background:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-soft);}
-  .fbtn.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .fbtn.active{color:#fff;border-color:transparent;}
+  .fbtn.active[data-dim="Reliability"]{background:var(--rel);}
+  .fbtn.active[data-dim="Availability"]{background:var(--ava);}
+  .fbtn.active[data-dim="Maintainability"]{background:var(--mnt);}
+  .fbtn.active[data-dim="all"]{background:var(--text);}
 
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-soft);padding:8px 10px;border-bottom:1px solid var(--border);}
-  tbody td{padding:10px;border-bottom:1px solid #f0f2f6;}
-  tbody tr{cursor:pointer;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  thead th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--text-soft);padding:8px 8px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody td{padding:9px 8px;border-bottom:1px solid #f0f2f6;vertical-align:top;}
   tbody tr:hover{background:#f8faff;}
-  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-block;}
-  .badge.good{background:var(--good-soft);color:var(--good);}
-  .badge.warn{background:var(--warn-soft);color:var(--warn);}
-  .badge.bad{background:var(--bad-soft);color:var(--bad);}
+  .desc-cell{max-width:260px;}
+  .badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-block;white-space:nowrap;}
+  .badge.rel{background:var(--rel-soft);color:var(--rel);}
+  .badge.ava{background:var(--ava-soft);color:var(--ava);}
+  .badge.mnt{background:var(--mnt-soft);color:var(--mnt);}
+  .src-tag{font-size:9.5px;color:var(--text-soft);display:block;margin-top:2px;}
+  .cat-select, .ram-select{font-size:12px;padding:5px 6px;border-radius:7px;border:1px solid var(--border);background:#fbfcfe;font-family:inherit;max-width:150px;}
+  .view-btn{border:none;background:var(--primary-soft);color:var(--primary-dark);font-size:11px;font-weight:700;padding:5px 9px;border-radius:7px;cursor:pointer;}
   .empty-state{text-align:center;padding:40px 10px;color:var(--text-soft);font-size:13.5px;}
   .empty-state .big{font-size:34px;margin-bottom:8px;}
-  .table-scroll{max-height:420px;overflow-y:auto;}
+  .table-scroll{max-height:480px;overflow-y:auto;overflow-x:auto;}
 
-  /* What-if */
-  .simulator{margin-top:26px;}
-  .sim-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
-  .sim-head h2{font-size:19px;margin:0;font-weight:800;}
-  .sim-head p{margin:2px 0 0;color:var(--text-soft);font-size:13px;}
-  .sim-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;align-items:start;}
-  @media(max-width:980px){.sim-layout{grid-template-columns:1fr;}}
+  .cause-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+  .cause-row{display:flex;align-items:center;gap:10px;font-size:12.5px;}
+  .cause-row .cname{flex:1;color:var(--text);}
+  .cause-bar-bg{flex:2;background:#eef1f6;border-radius:6px;height:8px;overflow:hidden;}
+  .cause-bar-fill{height:100%;background:var(--primary);border-radius:6px;}
+  .cause-row .cn{width:26px;text-align:right;font-weight:700;color:var(--text-soft);}
 
+  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px;}
+  @media(max-width:820px){.calc-grid{grid-template-columns:1fr;}}
   .field{margin-bottom:14px;}
   .field label{display:block;font-size:12px;font-weight:700;color:var(--text-soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;}
-  select, input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-size:13.5px;font-family:inherit;background:#fbfcfe;color:var(--text);}
-  select:focus, input[type=number]:focus{outline:none;border-color:var(--primary);background:#fff;}
-  .seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;}
-  .seg button{border:none;background:#fff;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text-soft);}
-  .seg button.active{background:var(--primary);color:#fff;}
-  .mttr-readout{font-size:26px;font-weight:800;color:var(--primary-dark);margin:6px 0 2px;}
-  .mttr-note{font-size:11.5px;color:var(--text-soft);}
-  .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-soft);margin-top:4px;}
+  select, input[type=number], input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-size:13.5px;font-family:inherit;background:#fbfcfe;color:var(--text);}
+  select:focus, input:focus{outline:none;border-color:var(--primary);background:#fff;}
+  .calc-result{background:var(--primary-soft);border:1px solid #d3e3ff;border-radius:12px;padding:20px;text-align:center;}
+  .calc-result .cr-value{font-size:40px;font-weight:800;color:var(--primary-dark);}
+  .calc-result .cr-formula{font-family:'Courier New',monospace;font-size:12.5px;color:var(--text-soft);margin-top:8px;}
 
-  .result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-  .rc{border:1px solid var(--border);border-radius:11px;padding:12px 14px;background:#fbfcfe;}
-  .rc .rl{font-size:11px;color:var(--text-soft);font-weight:700;text-transform:uppercase;}
-  .rc .rv{font-size:22px;font-weight:800;margin-top:4px;}
-  .rc.pos .rv{color:var(--good);} .rc.neg .rv{color:var(--bad);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:22px;}
+  .modal-box h3{margin:0 0 14px;font-size:16px;}
+  .modal-box .mrow{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f0f2f6;font-size:13px;}
+  .modal-box .mrow .mk{width:150px;flex-shrink:0;color:var(--text-soft);font-weight:600;}
+  .modal-box .mv{flex:1;word-break:break-word;}
+  .modal-close{float:right;border:none;background:#eef1f6;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:15px;}
 
-  .formula-box{background:var(--primary-soft);border:1px solid #d3e3ff;border-radius:11px;padding:14px 16px;font-size:13.5px;margin-bottom:16px;line-height:1.7;}
-  .formula-box b{color:var(--primary-dark);}
-  .formula-eq{font-family:'Courier New',monospace;font-size:13px;color:var(--text-soft);}
-
-  .matrix-table{margin-top:14px;}
   footer{padding:30px 0 50px;text-align:center;color:var(--text-soft);font-size:12px;}
   canvas{max-width:100%;}
 </style>
@@ -142,11 +138,10 @@
   <div class="wrap topbar-inner">
     <div class="brand">
       <div class="logo">RA</div>
-      <div>RAM Insight<small>Reliability · Availability · Maintainability Console</small></div>
+      <div>RAM Insight<small>Auto-Classified Equipment Reliability Log</small></div>
     </div>
     <div class="actions">
-      <button class="btn ghost" id="templateBtn">📄 ดาวน์โหลดเทมเพลต</button>
-      <button class="btn ghost" id="sampleBtn">🧪 ใช้ข้อมูลตัวอย่าง</button>
+      <button class="btn ghost" id="sampleBtn">🧪 ข้อมูลตัวอย่าง</button>
       <label class="btn primary" for="fileInput">⬆ อัปโหลด Excel/CSV</label>
       <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
       <button class="btn" id="exportExcelBtn" disabled>⬇ Export Excel</button>
@@ -157,50 +152,42 @@
 
 <div class="wrap">
   <div class="hero">
-    <h1>Substation Equipment RAM Dashboard</h1>
-    <p>วิเคราะห์ Reliability, Availability และ Maintainability ของอุปกรณ์ จากไฟล์ข้อมูลของคุณเอง พร้อมโหมดจำลองสถานการณ์ What-If</p>
+    <h1>Equipment Failure Log — Auto Classification & RAM Analytics</h1>
+    <p>อัปโหลดไฟล์บันทึกปัญหาอุปกรณ์ได้โดยไม่จำกัดจำนวนคอลัมน์ ไม่จำกัดจำนวนอุปกรณ์ และไม่จำเป็นต้องแยกประเภทมาก่อน — ระบบจะจัดประเภท <b>อุปกรณ์</b> และมิติ <b>Reliability / Availability / Maintainability</b> ให้อัตโนมัติจากข้อความที่มี พร้อมให้แก้ไขผลลัพธ์ได้ทุกแถว</p>
     <div id="dataStatus" class="status-pill dim"><span class="dot"></span> ยังไม่มีข้อมูล — อัปโหลดไฟล์หรือใช้ข้อมูลตัวอย่าง</div>
   </div>
 
-  <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi" id="kpiAvail">
-      <div class="label">Fleet Availability</div>
-      <div class="target">Target ≥ <span id="targetDisplay">96.00</span>%</div>
-      <div class="value">-%</div>
-      <div class="sub">ค่าเฉลี่ยความพร้อมใช้งานของอุปกรณ์ทั้งหมด</div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">รายการทั้งหมด</div><div class="value" id="kpiTotal">-</div><div class="sub">Total records ที่นำเข้า (ทุกชีต)</div></div>
+    <div class="kpi"><div class="label">ประเภทอุปกรณ์</div><div class="value" id="kpiCats">-</div><div class="sub">จัดกลุ่มอัตโนมัติจาก Component/รายละเอียด</div></div>
+    <div class="kpi"><div class="label">หน่วยงานที่เกี่ยวข้อง</div><div class="value" id="kpiDepts">-</div><div class="sub">Department ที่พบในข้อมูล</div></div>
+    <div class="kpi"><div class="label">มิติที่พบมากสุด</div><div class="value" id="kpiDominant">-</div><div class="sub">สัดส่วน RAM ที่ครองอันดับ 1</div></div>
+  </div>
+
+  <div class="ram-grid">
+    <div class="panel">
+      <h2>RAM Dimension Distribution</h2>
+      <div class="panel-sub">สัดส่วนปัญหาแยกตามมิติ Reliability / Availability / Maintainability</div>
+      <canvas id="ramChart" height="210"></canvas>
+      <div id="ramEmpty" class="empty-state" style="display:none;"><div class="big">🥧</div>ยังไม่มีข้อมูล</div>
     </div>
-    <div class="kpi" id="kpiMtbf">
-      <div class="label">MTBF เฉลี่ย</div>
-      <div class="target">Mean Time Between Failures</div>
-      <div class="value">- hrs</div>
-      <div class="sub">ชั่วโมงทำงานเฉลี่ยระหว่างการเสียหาย</div>
-    </div>
-    <div class="kpi" id="kpiMttr">
-      <div class="label">MTTR เฉลี่ย</div>
-      <div class="target">Target ≤ 10 hrs</div>
-      <div class="value">- hrs</div>
-      <div class="sub">เวลาเฉลี่ยในการซ่อมบำรุงแก้ไข</div>
-    </div>
-    <div class="kpi" id="kpiModes">
-      <div class="label">Failure Modes</div>
-      <div class="target">Cataloged Registry</div>
-      <div class="value">-</div>
-      <div class="sub">จำนวนรูปแบบความเสียหายที่บันทึกไว้</div>
+    <div class="panel">
+      <h2>สรุปตามมิติ</h2>
+      <div class="panel-sub" style="margin-bottom:6px;">คลิกเพื่อกรองตารางด้านล่าง</div>
+      <div class="ram-stats" id="ramStats"></div>
     </div>
   </div>
 
   <div class="risk-grid">
     <div class="risk-card">
-      <div class="rk-label">⚠ Lowest Availability Component</div>
-      <div class="rk-name" id="riskLowName">-</div>
-      <div class="rk-value" id="riskLowValue">ยังไม่มีข้อมูล</div>
-      <div class="rk-note">อุปกรณ์ที่ควรพิจารณาทำ Condition-Based Maintenance ก่อน เพื่อลดความเสี่ยงหยุดทำงานฉุกเฉิน</div>
+      <div class="rk-label">🔧 อุปกรณ์ที่พบปัญหาบ่อยที่สุด</div>
+      <div class="rk-name" id="riskCatName">-</div>
+      <div class="rk-value" id="riskCatValue">ยังไม่มีข้อมูล</div>
     </div>
-    <div class="risk-card mttr">
-      <div class="rk-label">⏱ Maximum Repair Latency (Peak MTTR)</div>
-      <div class="rk-name" id="riskHighName">-</div>
-      <div class="rk-value" id="riskHighValue">ยังไม่มีข้อมูล</div>
-      <div class="rk-note">ควรพิจารณาสต๊อกอะไหล่เฉพาะทางและวางแผนขั้นตอนซ่อมบำรุงให้พร้อม</div>
+    <div class="risk-card b">
+      <div class="rk-label">🧩 สาเหตุที่พบบ่อยที่สุด</div>
+      <div class="rk-name" id="riskCauseName">-</div>
+      <div class="rk-value" id="riskCauseValue">ยังไม่มีข้อมูล</div>
     </div>
   </div>
 
@@ -208,101 +195,56 @@
     <div class="panel">
       <div class="panel-head">
         <div>
-          <h2>System Diagnostics & RAM Matrix</h2>
-          <div class="panel-sub">คลิกที่แถวเพื่อโหลดอุปกรณ์นั้นเข้าสู่ What-If Simulator</div>
+          <h2>Failure Records (จัดประเภทอัตโนมัติ — แก้ไขได้)</h2>
+          <div class="panel-sub">ตัวหนังสือ "Auto" หมายถึงระบบประเมินให้ ไม่ได้มาจากไฟล์ต้นฉบับ — แก้ไขได้ที่ dropdown ในแต่ละแถว</div>
         </div>
-        <div class="filter-btns">
-          <button class="fbtn active" data-filter="all">All Items</button>
-          <button class="fbtn" data-filter="avail">Avail &lt; 96%</button>
-          <button class="fbtn" data-filter="mttr">MTTR &gt; 10 hrs</button>
-        </div>
+      </div>
+      <div class="toolbar">
+        <input type="text" class="search-input" id="searchInput" placeholder="ค้นหา รหัส / คำอธิบาย / สาเหตุ / หน่วยงาน...">
+        <select class="mini-select" id="catFilter"><option value="">ทุกประเภทอุปกรณ์</option></select>
+        <select class="mini-select" id="probFilter"><option value="">ทุก Problem Category</option></select>
+      </div>
+      <div class="fbtn-row" id="ramFilterRow" style="margin-bottom:12px;">
+        <button class="fbtn active" data-dim="all">ทั้งหมด</button>
+        <button class="fbtn" data-dim="Reliability">Reliability</button>
+        <button class="fbtn" data-dim="Availability">Availability</button>
+        <button class="fbtn" data-dim="Maintainability">Maintainability</button>
       </div>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Equipment</th><th>Category</th><th>MTBF (hrs)</th><th>MTTR (hrs)</th><th>Availability</th><th>Status</th></tr></thead>
-          <tbody id="equipTableBody"><tr><td colspan="6" class="empty-state"><div class="big">📊</div>ยังไม่มีข้อมูลอุปกรณ์</td></tr></tbody>
+          <thead><tr><th>รหัส</th><th>อุปกรณ์ (auto)</th><th>รายละเอียด</th><th>RAM</th><th>Problem Cat.</th><th>หน่วยงาน</th><th></th></tr></thead>
+          <tbody id="recordsBody"><tr><td colspan="7" class="empty-state"><div class="big">📋</div>ยังไม่มีข้อมูล</td></tr></tbody>
         </table>
       </div>
     </div>
     <div class="panel">
-      <h2>Failure Cause Distribution</h2>
-      <div class="panel-sub" style="margin-bottom:14px;">สัดส่วนสาเหตุของความเสียหายทั้งหมด</div>
-      <canvas id="causeChart" height="230"></canvas>
-      <div id="causeEmpty" class="empty-state" style="display:none;"><div class="big">🥧</div>ยังไม่มีข้อมูล</div>
+      <h2>ประเภทอุปกรณ์ที่พบปัญหา</h2>
+      <div class="panel-sub" style="margin-bottom:10px;">จำนวนรายการต่อประเภท (มากไปน้อย)</div>
+      <canvas id="catChart" height="260"></canvas>
+      <div id="catEmpty" class="empty-state" style="display:none;"><div class="big">📦</div>ยังไม่มีข้อมูล</div>
+
+      <h2 style="margin-top:24px;">Top Causes</h2>
+      <div class="cause-list" id="causeList"></div>
     </div>
   </div>
 
-  <div class="panel simulator">
-    <div class="sim-head">
+  <div class="panel">
+    <h2>🧮 Quick MTBF/MTTR Availability Calculator</h2>
+    <div class="panel-sub">เครื่องมือคำนวณ Availability แบบด่วน สำหรับกรณีที่มีข้อมูลเชิงเวลา (ไม่ผูกกับไฟล์ที่อัปโหลด เพราะไฟล์บันทึกปัญหาทั่วไปมักไม่มี MTBF/MTTR)</div>
+    <div class="calc-grid">
       <div>
-        <h2>🧮 RAM WHAT-IF SIMULATOR</h2>
-        <p>จำลองสถานการณ์การซ่อมบำรุงเพื่อประเมินผลกระทบต่อ Availability</p>
+        <div class="field">
+          <label>อุปกรณ์ (อ้างอิงจากประเภทที่จัดไว้ — ใส่เองก็ได้)</label>
+          <select id="calcCategory"><option value="">— เลือก / พิมพ์เอง —</option></select>
+        </div>
+        <div class="field"><label>MTBF (ชั่วโมง)</label><input type="number" id="calcMtbf" min="1" step="1" value="4320"></div>
+        <div class="field"><label>MTTR (ชั่วโมง)</label><input type="number" id="calcMttr" min="0" step="0.5" value="18"></div>
+        <button class="btn primary" id="calcRunBtn" style="width:100%;justify-content:center;padding:11px;">▶ คำนวณ Availability</button>
       </div>
-    </div>
-    <div class="sim-layout">
-      <div>
-        <div class="field">
-          <label>Equipment</label>
-          <select id="wiEquipment"><option value="">— เลือกอุปกรณ์ —</option></select>
-        </div>
-        <div class="field">
-          <label>Failure Mode</label>
-          <select id="wiMode" disabled><option value="">— เลือกอุปกรณ์ก่อน —</option></select>
-        </div>
-        <div class="field">
-          <label>Failure Cause</label>
-          <select id="wiCause" disabled><option value="">— เลือก Failure Mode ก่อน —</option></select>
-        </div>
-
-        <div class="field">
-          <label>Repair Time (MTTR)</label>
-          <div class="seg" id="mttrSeg">
-            <button class="active" data-mode="preset">Use Preset</button>
-            <button data-mode="custom">Custom</button>
-          </div>
-          <div class="mttr-readout" id="mttrReadout">-- hrs</div>
-          <div class="mttr-note" id="mttrNote">เลือก Failure Cause เพื่อโหลดค่า MTTR อัตโนมัติ</div>
-        </div>
-
-        <div class="field">
-          <label>Operating MTTR (hrs)</label>
-          <input type="number" id="wiMttrInput" min="0" step="0.5" disabled>
-        </div>
-        <div class="field">
-          <label>MTBF (hours)</label>
-          <input type="number" id="wiMtbf" min="1" step="10">
-          <div class="range-labels"><span>50 hrs</span><span>25,000 hrs</span><span>50,000 hrs</span></div>
-        </div>
-        <div class="field">
-          <label>Target Availability (%)</label>
-          <input type="number" id="wiTarget" min="0" max="100" step="0.01" value="96">
-        </div>
-        <button class="btn primary" id="runSimBtn" style="width:100%;justify-content:center;padding:11px;" disabled>▶ Run Simulation</button>
-      </div>
-
-      <div>
-        <div class="result-cards">
-          <div class="rc"><div class="rl">Baseline Availability</div><div class="rv" id="baselineAvail">--%</div></div>
-          <div class="rc"><div class="rl">Simulated Availability</div><div class="rv" id="simAvail">--%</div></div>
-          <div class="rc" id="changeCard"><div class="rl">Availability Change</div><div class="rv" id="availChange">--%</div></div>
-        </div>
-        <div class="formula-box" id="formulaBox">
-          <b>Reliability Calculation</b><br>
-          <span class="formula-eq">A = MTBF / (MTBF + MTTR)</span><br>
-          <span id="formulaDetail">เลือกอุปกรณ์และรัน Simulation เพื่อดูรายละเอียดการคำนวณ</span>
-        </div>
-        <canvas id="comparisonChart" height="180"></canvas>
-
-        <div class="matrix-table">
-          <h2 style="font-size:14px;">Simulated MTTR Reference Matrix</h2>
-          <div class="panel-sub" style="margin-bottom:10px;">พารามิเตอร์ที่บันทึกไว้สำหรับอุปกรณ์ที่เลือก</div>
-          <div class="table-scroll" style="max-height:220px;">
-            <table>
-              <thead><tr><th>Failure Mode</th><th>Failure Cause</th><th>Preset MTTR (hrs)</th></tr></thead>
-              <tbody id="matrixBody"><tr><td colspan="3" class="empty-state">กรุณาเลือกอุปกรณ์เพื่อแสดงพารามิเตอร์</td></tr></tbody>
-            </table>
-          </div>
-        </div>
+      <div class="calc-result">
+        <div style="font-size:12px;color:var(--text-soft);font-weight:700;text-transform:uppercase;">Availability</div>
+        <div class="cr-value" id="calcValue">--%</div>
+        <div class="cr-formula" id="calcFormula">A = MTBF / (MTBF + MTTR)</div>
       </div>
     </div>
   </div>
@@ -310,32 +252,60 @@
   <footer>RAM Insight — client-side analytics tool. ไม่มีการส่งข้อมูลออกจากเบราว์เซอร์ของคุณ.</footer>
 </div>
 
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalCloseBtn">✕</button>
+    <h3>รายละเอียดทั้งหมดของรายการ</h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
 /* ============================= STATE ============================= */
-let RAW = [];              // raw row-level records {equipment, category, mtbf, mttr, mode, cause, target}
-let EQUIP = [];             // aggregated per-equipment {name, category, mtbf, mttr, availability, records[]}
-let causeChart = null;
-let comparisonChart = null;
-let currentFilter = 'all';
-let simMode = 'preset';     // preset | custom
+let RAW = [];
+let VISIBLE = [];
+let ramChart=null, catChart=null;
+let ramFilter='all';
+
+const RAM_COLOR = { Reliability:'#2f6fed', Availability:'#0f9d6b', Maintainability:'#e08a1e' };
+const RAM_CLASS = { Reliability:'rel', Availability:'ava', Maintainability:'mnt' };
 
 const FIELD_ALIASES = {
-  equipment: ['equipment','equipmentname','asset','assetname','name','tag'],
-  category: ['category','class','equipmentclass','type','system'],
-  mtbf: ['mtbf','mtbfhrs','mtbfhours','mtbfhr'],
-  mttr: ['mttr','mttrhrs','mttrhours','mttrhr'],
-  mode: ['failuremode','mode','failuretype'],
-  cause: ['failurecause','cause','rootcause'],
-  target: ['targetavailability','target','targetavail','targetpct']
+  equipment_group: ['equipmentgroup','group','plant','area','site'],
+  component: ['component','equipment','equipmentname','asset','item','part','subsystem'],
+  code: ['code','id','tagno','tag','itemcode','recordid','no'],
+  description: ['description','desc','detail','details','issue','problem','finding','symptom'],
+  problem_category: ['problemcategory','category','issuetype','problemtype','type'],
+  cause: ['cause','rootcause','reason'],
+  remedy: ['remedy','action','correctiveaction','solution','recommendation'],
+  department: ['department','dept','responsible','owner','team'],
+  ram_classification: ['ramclassification','ramclass','ramcategory','ram'],
+  mtbf: ['mtbf','mtbfhrs','mtbfhours'],
+  mttr: ['mttr','mttrhrs','mttrhours']
 };
 
-/* ============================= HELPERS ============================= */
-function normKey(k){ return String(k).toLowerCase().replace(/[^a-z0-9]/g,''); }
+const EQUIP_CATS = {
+  'Circuit Breaker / Switchgear': ['breaker','เบรกเกอร์','สวิทซ์','switchgear','recloser'],
+  'Transformer': ['transformer','หม้อแปลง'],
+  'Battery / DC System': ['battery','แบตเตอรี่','ups'],
+  'Fire Protection System': ['fire','ดับเพลิง','detector','alarm','nitrogen','sprinkler','priming','soft drop','pilot line','ไนโตรเจน'],
+  'AC/DC Distribution Board': ['ac board','dc board','distribution board','panel','ตู้ไฟ','บอร์ด','switchboard'],
+  'Compressor / Rotating Equipment': ['compressor','pump','motor','ปั๊ม','มอเตอร์','คอมเพรสเซอร์','พัดลม','fan'],
+  'Control & Instrumentation': ['control','วงจร','instrument','sensor','relay','รีเลย์','atf','สัญญาณ','ป้องกัน'],
+  'Cabling & Wiring': ['cable','สายไฟ','wiring','สายเคเบิล','ฉนวน'],
+  'Structural / Corrosion': ['สนิม','corrosion','rust','โครงสร้าง'],
+  'Cooling System': ['cooling','หม้อน้ำ','radiator'],
+  'Logistics / Administrative': ['รอจัดซื้อ','ไม่มีอะไหล่','spare part','waiting','etc']
+};
+const CAT_KEYS = Object.keys(EQUIP_CATS);
 
-function mapRow(rawRow){
-  const keys = Object.keys(rawRow);
+/* ============================= HELPERS ============================= */
+function normKey(k){ return String(k).toLowerCase().replace(/[^a-z0-9ก-๙]/g,''); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function mapRow(rawRow, sheetName){
   const normMap = {};
-  keys.forEach(k => normMap[normKey(k)] = rawRow[k]);
+  Object.keys(rawRow).forEach(k => normMap[normKey(k)] = rawRow[k]);
   const out = {};
   for(const field in FIELD_ALIASES){
     let val;
@@ -345,404 +315,172 @@ function mapRow(rawRow){
     out[field] = val;
   }
   return {
-    equipment: out.equipment ? String(out.equipment).trim() : null,
-    category: out.category ? String(out.category).trim() : 'Uncategorized',
-    mtbf: parseFloat(out.mtbf),
-    mttr: parseFloat(out.mttr),
-    mode: out.mode ? String(out.mode).trim() : 'Unspecified',
-    cause: out.cause ? String(out.cause).trim() : 'Unspecified',
-    target: out.target ? parseFloat(out.target) : 96
+    sheet: sheetName,
+    raw: rawRow,
+    equipment_group: out.equipment_group ? String(out.equipment_group).trim() : '',
+    component: out.component ? String(out.component).trim() : '',
+    code: out.code ? String(out.code).trim() : '',
+    description: out.description ? String(out.description).trim() : '',
+    problem_category: out.problem_category ? String(out.problem_category).trim() : (sheetName||''),
+    cause: out.cause ? String(out.cause).trim() : '',
+    remedy: out.remedy ? String(out.remedy).trim() : '',
+    department: out.department ? String(out.department).trim() : '',
+    ram_classification_raw: out.ram_classification ? String(out.ram_classification).trim() : '',
+    mtbf: out.mtbf!==undefined ? parseFloat(out.mtbf) : NaN,
+    mttr: out.mttr!==undefined ? parseFloat(out.mttr) : NaN
   };
 }
 
-function availability(mtbf, mttr){
-  if(!isFinite(mtbf) || !isFinite(mttr) || (mtbf+mttr)===0) return null;
-  return (mtbf/(mtbf+mttr))*100;
+/* ============================= CLASSIFICATION ============================= */
+function classifyEquipment(r){
+  const text = ((r.component||'') + ' ' + (r.description||'')).toLowerCase();
+  for(const cat of CAT_KEYS){
+    if(EQUIP_CATS[cat].some(kw=>text.includes(kw))) return { cat, source: 'auto' };
+  }
+  if(r.component){
+    const cleaned = r.component.replace(/_/g,' ').replace(/\//g,' / ').trim();
+    return { cat: cleaned, source: 'from file' };
+  }
+  return { cat: 'Uncategorized', source: 'auto' };
 }
 
-function fmt(n, d=2){ return isFinite(n) ? n.toFixed(d) : '-'; }
+function parseRamClassification(raw){
+  if(!raw) return null;
+  const lower = raw.toLowerCase();
+  let primary = null;
+  if(lower.includes('reliability')) primary='Reliability';
+  else if(lower.includes('availability')) primary='Availability';
+  else if(lower.includes('maintainability')) primary='Maintainability';
+  if(!primary) return null;
+  let sub = raw.replace(new RegExp(primary,'i'),'').replace(/^[\s/:\-()]+/,'').replace(/[)\s]+$/,'').trim();
+  if(!sub) sub = '-';
+  return { primary, sub, source:'from file' };
+}
 
-/* ============================= DATA PIPELINE ============================= */
-function ingest(rows){
-  const mapped = rows.map(mapRow).filter(r => r.equipment && isFinite(r.mtbf) && isFinite(r.mttr));
-  if(mapped.length === 0){
-    alert('ไม่พบข้อมูลที่ถูกต้อง กรุณาตรวจสอบว่าไฟล์มีคอลัมน์: Equipment, Category, MTBF, MTTR, FailureMode, FailureCause');
+function inferRamDimension(r){
+  const cat = (r.problem_category||'').toLowerCase();
+  const cause = (r.cause||'').toLowerCase();
+  const desc = (r.description||'').toLowerCase();
+  const blob = cat+' '+cause+' '+desc;
+  if(cat.includes('waiting') || blob.includes('รอจัดซื้อ') || blob.includes('ไม่มีอะไหล่') || blob.includes('spare'))
+    return {primary:'Maintainability', sub:'Logistics / Spare Parts (Auto)', source:'auto'};
+  if(cat.includes('leak') || blob.includes('รั่ว'))
+    return {primary:'Availability', sub:'Leakage (Auto)', source:'auto'};
+  if(cat.includes('corrosion') || blob.includes('สนิม'))
+    return {primary:'Reliability', sub:'Corrosion / Wear-out (Auto)', source:'auto'};
+  if(blob.includes('เสื่อมสภาพ') || blob.includes('aging'))
+    return {primary:'Reliability', sub:'Aging & Fatigue (Auto)', source:'auto'};
+  if(cat.includes('damaged') || cat.includes('error') || blob.includes('ผิดพลาด'))
+    return {primary:'Reliability', sub:'Equipment Fault (Auto)', source:'auto'};
+  return {primary:'Maintainability', sub:'Unclassified (Auto)', source:'auto'};
+}
+
+function classifyRow(r, idx){
+  const eq = classifyEquipment(r);
+  const ramFromFile = parseRamClassification(r.ram_classification_raw);
+  const ram = ramFromFile || inferRamDimension(r);
+  return {
+    id: 'rec_'+idx,
+    ...r,
+    equipCategory: eq.cat,
+    equipSource: eq.source,
+    ramPrimary: ram.primary,
+    ramSub: ram.sub,
+    ramSource: ram.source
+  };
+}
+
+/* ============================= INGEST ============================= */
+function ingestWorkbook(wb){
+  const records = [];
+  wb.SheetNames.forEach(sheetName=>{
+    const sheet = wb.Sheets[sheetName];
+    const json = XLSX.utils.sheet_to_json(sheet, {defval:''});
+    if(json.length===0) return;
+    const headerKeys = Object.keys(json[0]).map(normKey);
+    const looksLikeSummary = headerKeys.length<=2 && headerKeys.some(h=>h.includes('totalrecord')||h.includes('count'));
+    if(looksLikeSummary) return;
+    json.forEach(row=>{
+      const mapped = mapRow(row, sheetName);
+      if(!mapped.description && !mapped.component && !mapped.code) return;
+      records.push(mapped);
+    });
+  });
+  if(records.length===0){
+    alert('ไม่พบข้อมูลที่นำเข้าได้ กรุณาตรวจสอบไฟล์');
     return;
   }
-  RAW = mapped;
-  buildAggregates();
+  RAW = records.map((r,i)=>classifyRow(r,i));
+  populateFilters();
   renderAll();
 }
 
-function buildAggregates(){
-  const byEquip = {};
-  RAW.forEach(r => {
-    if(!byEquip[r.equipment]) byEquip[r.equipment] = { name:r.equipment, category:r.category, records:[], target:r.target };
-    byEquip[r.equipment].records.push(r);
+/* ============================= AGGREGATES ============================= */
+function aggregates(data){
+  const byCat={}, byRam={Reliability:0,Availability:0,Maintainability:0}, byCause={}, depts=new Set();
+  data.forEach(r=>{
+    byCat[r.equipCategory] = (byCat[r.equipCategory]||0)+1;
+    byRam[r.ramPrimary] = (byRam[r.ramPrimary]||0)+1;
+    if(r.cause) byCause[r.cause] = (byCause[r.cause]||0)+1;
+    if(r.department) depts.add(r.department);
   });
-  EQUIP = Object.values(byEquip).map(e => {
-    const mtbf = e.records.reduce((s,r)=>s+r.mtbf,0)/e.records.length;
-    const mttr = e.records.reduce((s,r)=>s+r.mttr,0)/e.records.length;
-    return { ...e, mtbf, mttr, availability: availability(mtbf,mttr) };
-  }).sort((a,b)=> a.availability - b.availability);
+  return {byCat, byRam, byCause, depts};
 }
 
-/* ============================= RENDER: KPIs ============================= */
+/* ============================= RENDER: KPI + RAM ============================= */
 function renderKpis(){
-  if(EQUIP.length===0){
+  if(RAW.length===0){
     document.getElementById('dataStatus').className='status-pill dim';
     document.getElementById('dataStatus').innerHTML='<span class="dot"></span> ยังไม่มีข้อมูล — อัปโหลดไฟล์หรือใช้ข้อมูลตัวอย่าง';
+    ['kpiTotal','kpiCats','kpiDepts','kpiDominant'].forEach(id=>document.getElementById(id).textContent='-');
     return;
   }
+  const sheets = new Set(RAW.map(r=>r.sheet)).size;
   document.getElementById('dataStatus').className='status-pill';
-  document.getElementById('dataStatus').innerHTML=`<span class="dot"></span> โหลดข้อมูลแล้ว ${EQUIP.length} อุปกรณ์ / ${RAW.length} บันทึกความเสียหาย`;
+  document.getElementById('dataStatus').innerHTML=`<span class="dot"></span> โหลดข้อมูลแล้ว ${RAW.length} รายการ จาก ${sheets} ชีต`;
 
-  const avgAvail = EQUIP.reduce((s,e)=>s+e.availability,0)/EQUIP.length;
-  const avgMtbf = RAW.reduce((s,r)=>s+r.mtbf,0)/RAW.length;
-  const avgMttr = RAW.reduce((s,r)=>s+r.mttr,0)/RAW.length;
-  const modeCount = new Set(RAW.map(r=>r.mode)).size;
-
-  const kA = document.getElementById('kpiAvail');
-  kA.querySelector('.value').textContent = fmt(avgAvail)+'%';
-  kA.className = 'kpi ' + (avgAvail>=96?'good':avgAvail>=90?'warn':'bad');
-
-  document.getElementById('kpiMtbf').querySelector('.value').textContent = fmt(avgMtbf,0)+' hrs';
-  const kM = document.getElementById('kpiMttr');
-  kM.querySelector('.value').textContent = fmt(avgMttr,1)+' hrs';
-  kM.className = 'kpi ' + (avgMttr<=10?'good':avgMttr<=16?'warn':'bad');
-
-  document.getElementById('kpiModes').querySelector('.value').textContent = modeCount;
-
-  const worst = EQUIP[0];
-  const worstRecord = worst.records.slice().sort((a,b)=>availability(a.mtbf,a.mttr)-availability(b.mtbf,b.mttr))[0];
-  document.getElementById('riskLowName').textContent = worst.name;
-  document.getElementById('riskLowValue').textContent = `${fmt(worst.availability)}% · ${worstRecord.mode} (${worstRecord.cause})`;
-
-  const highMttrRecord = RAW.slice().sort((a,b)=>b.mttr-a.mttr)[0];
-  document.getElementById('riskHighName').textContent = highMttrRecord.equipment;
-  document.getElementById('riskHighValue').textContent = `${fmt(highMttrRecord.mttr,1)} hrs · ${highMttrRecord.mode} (${highMttrRecord.cause})`;
+  const agg = aggregates(RAW);
+  document.getElementById('kpiTotal').textContent = RAW.length;
+  document.getElementById('kpiCats').textContent = Object.keys(agg.byCat).length;
+  document.getElementById('kpiDepts').textContent = agg.depts.size || '-';
+  const dom = Object.entries(agg.byRam).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('kpiDominant').textContent = dom ? `${dom[0]} ${Math.round(dom[1]/RAW.length*100)}%` : '-';
 }
 
-/* ============================= RENDER: TABLE ============================= */
-function statusOf(e){
-  if(e.availability < 96 || e.mttr > 10) return e.availability < 90 || e.mttr > 16 ? 'bad' : 'warn';
-  return 'good';
-}
-
-function renderTable(){
-  const tbody = document.getElementById('equipTableBody');
-  let rows = EQUIP;
-  if(currentFilter === 'avail') rows = rows.filter(e=>e.availability<96);
-  if(currentFilter === 'mttr') rows = rows.filter(e=>e.mttr>10);
-
-  if(rows.length===0){
-    tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="big">📭</div>ไม่พบรายการที่ตรงกับตัวกรอง</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = rows.map(e=>{
-    const st = statusOf(e);
-    const label = st==='good'?'Good':st==='warn'?'Watch':'Critical';
-    return `<tr data-equip="${encodeURIComponent(e.name)}">
-      <td><b>${e.name}</b></td>
-      <td>${e.category}</td>
-      <td>${fmt(e.mtbf,0)}</td>
-      <td>${fmt(e.mttr,1)}</td>
-      <td>${fmt(e.availability)}%</td>
-      <td><span class="badge ${st}">${label}</span></td>
-    </tr>`;
-  }).join('');
-
-  tbody.querySelectorAll('tr[data-equip]').forEach(tr=>{
-    tr.addEventListener('click', ()=>{
-      const name = decodeURIComponent(tr.getAttribute('data-equip'));
-      document.getElementById('wiEquipment').value = name;
-      onEquipmentChange();
-      document.querySelector('.simulator').scrollIntoView({behavior:'smooth', block:'start'});
-    });
-  });
-}
-
-document.querySelectorAll('.fbtn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.getAttribute('data-filter');
-    renderTable();
-  });
-});
-
-/* ============================= RENDER: CAUSE CHART ============================= */
-function renderCauseChart(){
-  const ctx = document.getElementById('causeChart');
-  const emptyEl = document.getElementById('causeEmpty');
+function renderRamPanel(){
+  const ctx = document.getElementById('ramChart');
+  const emptyEl = document.getElementById('ramEmpty');
+  const statsEl = document.getElementById('ramStats');
   if(RAW.length===0){
     ctx.style.display='none'; emptyEl.style.display='block';
-    if(causeChart){ causeChart.destroy(); causeChart=null; }
+    if(ramChart){ ramChart.destroy(); ramChart=null; }
+    statsEl.innerHTML='';
     return;
   }
   ctx.style.display='block'; emptyEl.style.display='none';
-
-  const counts = {};
-  RAW.forEach(r => counts[r.cause] = (counts[r.cause]||0)+1);
-  const labels = Object.keys(counts);
-  const data = Object.values(counts);
-  const palette = ['#2f6fed','#0f9d6b','#e08a1e','#e0403f','#8b5cf6','#06b6d4','#f472b6','#84cc16','#facc15','#64748b'];
-
-  if(causeChart) causeChart.destroy();
-  causeChart = new Chart(ctx, {
+  const agg = aggregates(RAW);
+  const labels = Object.keys(agg.byRam);
+  const data = labels.map(l=>agg.byRam[l]);
+  if(ramChart) ramChart.destroy();
+  ramChart = new Chart(ctx, {
     type:'doughnut',
-    data:{ labels, datasets:[{ data, backgroundColor: labels.map((_,i)=>palette[i%palette.length]), borderWidth:2, borderColor:'#fff' }]},
-    options:{ plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:11} } } }, cutout:'62%' }
+    data:{ labels, datasets:[{ data, backgroundColor: labels.map(l=>RAM_COLOR[l]), borderWidth:2, borderColor:'#fff' }]},
+    options:{ plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:11}}}}, cutout:'62%' }
+  });
+  statsEl.innerHTML = labels.map(l=>{
+    const pct = RAW.length? Math.round(agg.byRam[l]/RAW.length*100):0;
+    return `<div class="ram-stat" data-dim="${l}" style="cursor:pointer;">
+      <span class="dot" style="background:${RAM_COLOR[l]}"></span>
+      <span class="rs-name">${l}</span>
+      <span class="rs-count">${agg.byRam[l]}</span>
+      <span class="rs-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+  statsEl.querySelectorAll('.ram-stat').forEach(el=>{
+    el.addEventListener('click', ()=> setRamFilter(el.getAttribute('data-dim')));
   });
 }
 
-/* ============================= WHAT-IF SIMULATOR ============================= */
-function populateEquipmentSelect(){
-  const sel = document.getElementById('wiEquipment');
-  sel.innerHTML = '<option value="">— เลือกอุปกรณ์ —</option>' + EQUIP.map(e=>`<option value="${e.name}">${e.name}</option>`).join('');
-  sel.disabled = EQUIP.length===0;
-}
-
-function onEquipmentChange(){
-  const name = document.getElementById('wiEquipment').value;
-  const modeSel = document.getElementById('wiMode');
-  const causeSel = document.getElementById('wiCause');
-  const runBtn = document.getElementById('runSimBtn');
-  const matrixBody = document.getElementById('matrixBody');
-
-  if(!name){
-    modeSel.innerHTML = '<option value="">— เลือกอุปกรณ์ก่อน —</option>'; modeSel.disabled=true;
-    causeSel.innerHTML = '<option value="">— เลือก Failure Mode ก่อน —</option>'; causeSel.disabled=true;
-    runBtn.disabled = true;
-    matrixBody.innerHTML = `<tr><td colspan="3" class="empty-state">กรุณาเลือกอุปกรณ์เพื่อแสดงพารามิเตอร์</td></tr>`;
-    document.getElementById('baselineAvail').textContent='--%';
-    return;
-  }
-  const equip = EQUIP.find(e=>e.name===name);
-  const modes = [...new Set(equip.records.map(r=>r.mode))];
-  modeSel.innerHTML = '<option value="">— เลือก Failure Mode —</option>' + modes.map(m=>`<option value="${m}">${m}</option>`).join('');
-  modeSel.disabled = false;
-  causeSel.innerHTML = '<option value="">— เลือก Failure Mode ก่อน —</option>'; causeSel.disabled = true;
-  runBtn.disabled = true;
-
-  document.getElementById('wiMtbf').value = fmt(equip.mtbf,0);
-  document.getElementById('baselineAvail').textContent = fmt(equip.availability)+'%';
-
-  matrixBody.innerHTML = equip.records.map(r=>`<tr><td>${r.mode}</td><td>${r.cause}</td><td>${fmt(r.mttr,1)}</td></tr>`).join('');
-
-  resetMttrReadout();
-}
-
-function onModeChange(){
-  const equipName = document.getElementById('wiEquipment').value;
-  const mode = document.getElementById('wiMode').value;
-  const causeSel = document.getElementById('wiCause');
-  if(!mode){ causeSel.innerHTML='<option value="">— เลือก Failure Mode ก่อน —</option>'; causeSel.disabled=true; return; }
-  const equip = EQUIP.find(e=>e.name===equipName);
-  const causes = equip.records.filter(r=>r.mode===mode).map(r=>r.cause);
-  causeSel.innerHTML = '<option value="">— เลือก Failure Cause —</option>' + [...new Set(causes)].map(c=>`<option value="${c}">${c}</option>`).join('');
-  causeSel.disabled = false;
-  resetMttrReadout();
-}
-
-function onCauseChange(){
-  const equipName = document.getElementById('wiEquipment').value;
-  const mode = document.getElementById('wiMode').value;
-  const cause = document.getElementById('wiCause').value;
-  const runBtn = document.getElementById('runSimBtn');
-  if(!cause){ resetMttrReadout(); runBtn.disabled = true; return; }
-  const equip = EQUIP.find(e=>e.name===equipName);
-  const record = equip.records.find(r=>r.mode===mode && r.cause===cause);
-  const preset = record ? record.mttr : equip.mttr;
-  document.getElementById('mttrReadout').textContent = fmt(preset,1)+' hrs';
-  document.getElementById('mttrReadout').dataset.preset = preset;
-  document.getElementById('mttrNote').textContent = 'ค่าที่โหลดอัตโนมัติจาก Failure Cause ที่เลือก';
-  document.getElementById('wiMttrInput').value = fmt(preset,1);
-  runBtn.disabled = false;
-}
-
-function resetMttrReadout(){
-  document.getElementById('mttrReadout').textContent = '-- hrs';
-  document.getElementById('mttrReadout').dataset.preset = '';
-  document.getElementById('mttrNote').textContent = 'เลือก Failure Cause เพื่อโหลดค่า MTTR อัตโนมัติ';
-  document.getElementById('wiMttrInput').value = '';
-}
-
-document.getElementById('mttrSeg').addEventListener('click', e=>{
-  const btn = e.target.closest('button'); if(!btn) return;
-  simMode = btn.getAttribute('data-mode');
-  document.querySelectorAll('#mttrSeg button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const input = document.getElementById('wiMttrInput');
-  input.disabled = simMode === 'preset';
-  if(simMode === 'preset'){
-    const preset = document.getElementById('mttrReadout').dataset.preset;
-    if(preset) input.value = fmt(parseFloat(preset),1);
-  }
-});
-
-function runSimulation(){
-  const equipName = document.getElementById('wiEquipment').value;
-  const equip = EQUIP.find(e=>e.name===equipName);
-  const mtbf = parseFloat(document.getElementById('wiMtbf').value);
-  let mttr;
-  if(simMode==='preset'){
-    mttr = parseFloat(document.getElementById('mttrReadout').dataset.preset);
-  } else {
-    mttr = parseFloat(document.getElementById('wiMttrInput').value);
-  }
-  const target = parseFloat(document.getElementById('wiTarget').value) || 96;
-  document.getElementById('targetDisplay').textContent = fmt(target);
-
-  if(!isFinite(mtbf) || !isFinite(mttr)){ alert('กรุณากรอกค่า MTBF และ MTTR ให้ครบถ้วน'); return; }
-
-  const baseline = equip.availability;
-  const simulated = availability(mtbf, mttr);
-  const change = simulated - baseline;
-
-  document.getElementById('baselineAvail').textContent = fmt(baseline)+'%';
-  document.getElementById('simAvail').textContent = fmt(simulated)+'%';
-  const changeCard = document.getElementById('changeCard');
-  changeCard.className = 'rc ' + (change>=0?'pos':'neg');
-  document.getElementById('availChange').textContent = (change>=0?'+':'')+fmt(change)+'%';
-
-  document.getElementById('formulaDetail').innerHTML =
-    `MTBF = <b>${fmt(mtbf,0)}</b> hrs &nbsp;·&nbsp; MTTR = <b>${fmt(mttr,1)}</b> hrs<br>` +
-    `Availability = ${fmt(mtbf,0)} ÷ (${fmt(mtbf,0)} + ${fmt(mttr,1)}) = <b>${fmt(simulated)}%</b> ` +
-    `<span style="color:${simulated>=target?'var(--good)':'var(--bad)'}">(Target ${simulated>=target?'✓ met':'✗ not met'} ≥ ${fmt(target)}%)</span>`;
-
-  renderComparisonChart(baseline, simulated, target);
-}
-document.getElementById('runSimBtn').addEventListener('click', runSimulation);
-
-function renderComparisonChart(baseline, simulated, target){
-  const ctx = document.getElementById('comparisonChart');
-  if(comparisonChart) comparisonChart.destroy();
-  comparisonChart = new Chart(ctx, {
-    type:'bar',
-    data:{
-      labels:['Baseline','Simulated','Target'],
-      datasets:[{
-        data:[baseline, simulated, target],
-        backgroundColor:['#94a3b8','#2f6fed', target<=simulated ? '#0f9d6b':'#e0403f'],
-        borderRadius:6, maxBarThickness:60
-      }]
-    },
-    options:{
-      plugins:{ legend:{display:false} },
-      scales:{ y:{ suggestedMin:80, suggestedMax:100, ticks:{ callback:v=>v+'%' } } }
-    }
-  });
-}
-
-/* ============================= EVENTS ============================= */
-document.getElementById('wiEquipment').addEventListener('change', onEquipmentChange);
-document.getElementById('wiMode').addEventListener('change', onModeChange);
-document.getElementById('wiCause').addEventListener('change', onCauseChange);
-
-function renderAll(){
-  renderKpis();
-  renderTable();
-  renderCauseChart();
-  populateEquipmentSelect();
-  document.getElementById('exportExcelBtn').disabled = RAW.length===0;
-  document.getElementById('exportPdfBtn').disabled = RAW.length===0;
-}
-
-/* ============================= FILE UPLOAD ============================= */
-document.getElementById('fileInput').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt){
-    try{
-      const data = new Uint8Array(evt.target.result);
-      const wb = XLSX.read(data, {type:'array'});
-      const sheet = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(sheet, {defval:''});
-      ingest(json);
-    }catch(err){
-      alert('ไม่สามารถอ่านไฟล์ได้: '+err.message);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-  e.target.value = '';
-});
-
-/* ============================= SAMPLE DATA ============================= */
-function sampleData(){
-  return [
-    {Equipment:'Power Transformer T1', Category:'Transformer', MTBF:8760, MTTR:24, FailureMode:'Insulation Breakdown', FailureCause:'Aging'},
-    {Equipment:'Power Transformer T1', Category:'Transformer', MTBF:6000, MTTR:36, FailureMode:'Overheating', FailureCause:'Cooling Failure'},
-    {Equipment:'Power Transformer T2', Category:'Transformer', MTBF:9500, MTTR:18, FailureMode:'Insulation Breakdown', FailureCause:'Moisture Ingress'},
-    {Equipment:'Circuit Breaker CB-101', Category:'Circuit Breaker', MTBF:4320, MTTR:8, FailureMode:'Contact Wear', FailureCause:'Mechanical Fatigue'},
-    {Equipment:'Circuit Breaker CB-101', Category:'Circuit Breaker', MTBF:5200, MTTR:6, FailureMode:'Trip Failure', FailureCause:'Control Circuit Fault'},
-    {Equipment:'Circuit Breaker CB-102', Category:'Circuit Breaker', MTBF:3800, MTTR:14, FailureMode:'Contact Wear', FailureCause:'Corrosion'},
-    {Equipment:'Disconnector DS-201', Category:'Disconnector', MTBF:6500, MTTR:5, FailureMode:'Mechanical Jam', FailureCause:'Lubrication Failure'},
-    {Equipment:'Protection Relay PR-301', Category:'Protection', MTBF:12000, MTTR:4, FailureMode:'Mis-operation', FailureCause:'Software Fault'},
-    {Equipment:'Protection Relay PR-301', Category:'Protection', MTBF:10000, MTTR:3, FailureMode:'Calibration Drift', FailureCause:'Aging'},
-    {Equipment:'Battery Bank BB-401', Category:'DC System', MTBF:4000, MTTR:12, FailureMode:'Capacity Loss', FailureCause:'Cell Degradation'},
-    {Equipment:'Control Panel CP-501', Category:'Control', MTBF:7000, MTTR:6, FailureMode:'Wiring Fault', FailureCause:'Human Error'},
-    {Equipment:'Cooling System CS-601', Category:'Auxiliary', MTBF:2800, MTTR:16, FailureMode:'Fan Failure', FailureCause:'Bearing Wear'},
-    {Equipment:'Bus Bar BB-701', Category:'Busbar', MTBF:15000, MTTR:10, FailureMode:'Hotspot', FailureCause:'Loose Connection'}
-  ];
-}
-document.getElementById('sampleBtn').addEventListener('click', ()=> ingest(sampleData()));
-
-/* ============================= TEMPLATE DOWNLOAD ============================= */
-document.getElementById('templateBtn').addEventListener('click', ()=>{
-  const ws = XLSX.utils.json_to_sheet([
-    {Equipment:'Power Transformer T1', Category:'Transformer', MTBF:8760, MTTR:24, FailureMode:'Insulation Breakdown', FailureCause:'Aging'}
-  ]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Template');
-  XLSX.writeFile(wb, 'RAM_Data_Template.xlsx');
-});
-
-/* ============================= EXPORT EXCEL ============================= */
-document.getElementById('exportExcelBtn').addEventListener('click', ()=>{
-  if(RAW.length===0) return;
-  const detailRows = RAW.map(r=>({
-    Equipment:r.equipment, Category:r.category, MTBF_hrs:r.mtbf, MTTR_hrs:r.mttr,
-    FailureMode:r.mode, FailureCause:r.cause, Availability_pct:+fmt(availability(r.mtbf,r.mttr))
-  }));
-  const summaryRows = EQUIP.map(e=>({
-    Equipment:e.name, Category:e.category, Avg_MTBF_hrs:+fmt(e.mtbf,0), Avg_MTTR_hrs:+fmt(e.mttr,1),
-    Availability_pct:+fmt(e.availability), Status: statusOf(e), Failure_Records:e.records.length
-  }));
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(summaryRows), 'Equipment Summary');
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(detailRows), 'Failure Records');
-  XLSX.writeFile(wb, 'RAM_Report.xlsx');
-});
-
-/* ============================= EXPORT PDF ============================= */
-document.getElementById('exportPdfBtn').addEventListener('click', ()=>{
-  if(RAW.length===0) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const avgAvail = EQUIP.reduce((s,e)=>s+e.availability,0)/EQUIP.length;
-  const avgMtbf = RAW.reduce((s,r)=>s+r.mtbf,0)/RAW.length;
-  const avgMttr = RAW.reduce((s,r)=>s+r.mttr,0)/RAW.length;
-
-  doc.setFontSize(16); doc.text('RAM Insight — Substation Reliability Brief', 14, 18);
-  doc.setFontSize(10); doc.setTextColor(100);
-  doc.text('Generated: ' + new Date().toLocaleString(), 14, 25);
-
-  doc.setFontSize(11); doc.setTextColor(20);
-  doc.text(`Fleet Availability: ${fmt(avgAvail)}%   |   Avg MTBF: ${fmt(avgMtbf,0)} hrs   |   Avg MTTR: ${fmt(avgMttr,1)} hrs`, 14, 34);
-
-  doc.autoTable({
-    startY: 40,
-    head: [['Equipment','Category','MTBF (hrs)','MTTR (hrs)','Availability','Status']],
-    body: EQUIP.map(e=>[e.name, e.category, fmt(e.mtbf,0), fmt(e.mttr,1), fmt(e.availability)+'%', statusOf(e).toUpperCase()]),
-    styles:{ fontSize:9 }, headStyles:{ fillColor:[47,111,237] }
-  });
-  doc.save('RAM_Report.pdf');
-});
-
-/* ============================= INIT ============================= */
-renderAll();
-</script>
-</body>
-</html>
+function renderInsights(){
+  if(RAW.length===0){
+    document.getElementById('riskCatName').textContent='-'; document.getElementById('riskCatValue').text
