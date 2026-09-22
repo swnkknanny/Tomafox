@@ -22,20 +22,56 @@
     --radius:14px;
   }
   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;}
   .wrap{max-width:1320px;margin:0 auto;padding:0 24px;}
-  header.topbar{background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30;}
-  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:14px;flex-wrap:wrap;}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;}
-  .brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary),#6ea0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;}
-  .brand small{display:block;font-weight:500;color:var(--text-soft);font-size:11px;}
-  .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+  /* ===== Left Sidebar ===== */
+  .app-shell{display:flex;min-height:100vh;}
+  .sidebar{
+    width:276px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;
+    background:linear-gradient(190deg,#141a30 0%,#1c2550 60%,#222c5c 100%);
+    color:#eef1f8;display:flex;flex-direction:column;gap:26px;padding:26px 20px 20px;z-index:40;
+    box-shadow:4px 0 24px -8px rgba(10,15,35,.25);
+  }
+  .sidebar::-webkit-scrollbar{width:6px;}
+  .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:6px;}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:16.5px;}
+  .brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--primary),#7fb0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;box-shadow:0 6px 16px -4px rgba(47,111,237,.6);flex-shrink:0;}
+  .brand small{display:block;font-weight:500;color:#9aa4c4;font-size:10.5px;margin-top:2px;line-height:1.4;}
+
+  .side-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#7681a6;font-weight:700;margin:2px 0 4px;padding:0 4px;}
+  .side-nav{display:flex;flex-direction:column;gap:3px;}
+  .side-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#c3c9e0;text-decoration:none;font-size:13.5px;font-weight:600;transition:.15s;}
+  .side-link:hover{background:rgba(255,255,255,.07);color:#fff;}
+  .side-link.active{background:linear-gradient(90deg,rgba(47,111,237,.35),rgba(47,111,237,.08));color:#fff;box-shadow:inset 2px 0 0 var(--primary);}
+
+  .side-actions{display:flex;flex-direction:column;gap:8px;}
+  .sbtn{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#e7eaf6;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;width:100%;text-align:left;transition:.15s;}
+  .sbtn:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.28);}
+  .sbtn.primary{background:linear-gradient(135deg,var(--primary),#4f7fff);border-color:transparent;color:#fff;box-shadow:0 6px 16px -6px rgba(47,111,237,.7);}
+  .sbtn.primary:hover{filter:brightness(1.08);}
+  .sbtn:disabled{opacity:.35;cursor:not-allowed;}
+  input[type=file]{display:none;}
+
+  .sidebar-footer{margin-top:auto;font-size:10.5px;color:#7681a6;line-height:1.7;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);}
+
+  .main-content{flex:1;min-width:0;}
   .btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:9px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
   .btn:hover{border-color:var(--primary);color:var(--primary-dark);}
   .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
   .btn.primary:hover{background:var(--primary-dark);}
   .btn:disabled{opacity:.4;cursor:not-allowed;}
-  input[type=file]{display:none;}
+
+  @media(max-width:980px){
+    .app-shell{flex-direction:column;}
+    .sidebar{width:100%;height:auto;position:relative;flex-direction:row;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 18px;}
+    .side-nav{flex-direction:row;overflow-x:auto;gap:4px;}
+    .side-section-title{display:none;}
+    .side-actions{flex-direction:row;flex-wrap:wrap;}
+    .sbtn{width:auto;}
+    .sidebar-footer{display:none;}
+  }
 
   .hero{padding:26px 0 6px;}
   .hero h1{font-size:25px;margin:0 0 6px;font-weight:800;}
@@ -134,27 +170,40 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="wrap topbar-inner">
+<div class="app-shell">
+  <aside class="sidebar">
     <div class="brand">
       <div class="logo">RA</div>
-      <div>RAM Insight<small>Auto-Classified Equipment Reliability Log</small></div>
+      <div>RAM Insight<small>Auto-Classified Equipment<br>Reliability Log</small></div>
     </div>
-    <div class="actions">
-      <button class="btn ghost" id="sampleBtn">🧪 ข้อมูลตัวอย่าง</button>
-      <label class="btn primary" for="fileInput">⬆ อัปโหลด Excel/CSV</label>
-      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
-      <button class="btn" id="exportExcelBtn" disabled>⬇ Export Excel</button>
-      <button class="btn" id="exportPdfBtn" disabled>⬇ Export PDF</button>
-    </div>
-  </div>
-</header>
 
-<div class="wrap">
-  <div class="hero">
+    <nav class="side-nav">
+      <div class="side-section-title">เมนู</div>
+      <a href="#overview" class="side-link active" data-nav="overview">📊 ภาพรวม</a>
+      <a href="#records" class="side-link" data-nav="records">📋 รายการปัญหา</a>
+      <a href="#analytics" class="side-link" data-nav="analytics">📈 วิเคราะห์</a>
+      <a href="#calculator" class="side-link" data-nav="calculator">🧮 คำนวณ RAM</a>
+    </nav>
+
+    <div class="side-actions">
+      <div class="side-section-title">จัดการข้อมูล</div>
+      <button class="sbtn" id="sampleBtn">🧪 ข้อมูลตัวอย่าง</button>
+      <label class="sbtn primary" for="fileInput">⬆ อัปโหลด Excel/CSV</label>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+      <button class="sbtn" id="exportExcelBtn" disabled>⬇ Export Excel</button>
+      <button class="sbtn" id="exportPdfBtn" disabled>⬇ Export PDF</button>
+    </div>
+
+    <div id="dataStatus" class="status-pill dim"><span class="dot"></span> ยังไม่มีข้อมูล</div>
+
+    <div class="sidebar-footer">RAM Insight — client-side analytics tool.<br>ไม่มีการส่งข้อมูลออกจากเบราว์เซอร์ของคุณ</div>
+  </aside>
+
+  <main class="main-content">
+  <div class="wrap">
+  <div class="hero" id="overview">
     <h1>Equipment Failure Log — Auto Classification & RAM Analytics</h1>
     <p>อัปโหลดไฟล์บันทึกปัญหาอุปกรณ์ได้โดยไม่จำกัดจำนวนคอลัมน์ ไม่จำกัดจำนวนอุปกรณ์ และไม่จำเป็นต้องแยกประเภทมาก่อน — ระบบจะจัดประเภท <b>อุปกรณ์</b> และมิติ <b>Reliability / Availability / Maintainability</b> ให้อัตโนมัติจากข้อความที่มี พร้อมให้แก้ไขผลลัพธ์ได้ทุกแถว</p>
-    <div id="dataStatus" class="status-pill dim"><span class="dot"></span> ยังไม่มีข้อมูล — อัปโหลดไฟล์หรือใช้ข้อมูลตัวอย่าง</div>
   </div>
 
   <div class="kpi-grid">
@@ -192,7 +241,7 @@
   </div>
 
   <div class="grid-2">
-    <div class="panel">
+    <div class="panel" id="records">
       <div class="panel-head">
         <div>
           <h2>Failure Records (จัดประเภทอัตโนมัติ — แก้ไขได้)</h2>
@@ -217,7 +266,7 @@
         </table>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" id="analytics">
       <h2>ประเภทอุปกรณ์ที่พบปัญหา</h2>
       <div class="panel-sub" style="margin-bottom:10px;">จำนวนรายการต่อประเภท (มากไปน้อย)</div>
       <canvas id="catChart" height="260"></canvas>
@@ -228,7 +277,7 @@
     </div>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="calculator">
     <h2>🧮 Quick MTBF/MTTR Availability Calculator</h2>
     <div class="panel-sub">เครื่องมือคำนวณ Availability แบบด่วน สำหรับกรณีที่มีข้อมูลเชิงเวลา (ไม่ผูกกับไฟล์ที่อัปโหลด เพราะไฟล์บันทึกปัญหาทั่วไปมักไม่มี MTBF/MTTR)</div>
     <div class="calc-grid">
@@ -249,7 +298,8 @@
     </div>
   </div>
 
-  <footer>RAM Insight — client-side analytics tool. ไม่มีการส่งข้อมูลออกจากเบราว์เซอร์ของคุณ.</footer>
+  </div>
+  </main>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
@@ -483,4 +533,300 @@ function renderRamPanel(){
 
 function renderInsights(){
   if(RAW.length===0){
-    document.getElementById('riskCatName').textContent='-'; document.getElementById('riskCatValue').text
+    document.getElementById('riskCatName').textContent='-'; document.getElementById('riskCatValue').textContent='ยังไม่มีข้อมูล';
+    document.getElementById('riskCauseName').textContent='-'; document.getElementById('riskCauseValue').textContent='ยังไม่มีข้อมูล';
+    return;
+  }
+  const agg = aggregates(RAW);
+  const topCat = Object.entries(agg.byCat).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('riskCatName').textContent = topCat[0];
+  document.getElementById('riskCatValue').textContent = `${topCat[1]} รายการ (${Math.round(topCat[1]/RAW.length*100)}% ของทั้งหมด)`;
+
+  const causeEntries = Object.entries(agg.byCause).sort((a,b)=>b[1]-a[1]);
+  if(causeEntries.length){
+    document.getElementById('riskCauseName').textContent = causeEntries[0][0];
+    document.getElementById('riskCauseValue').textContent = `พบ ${causeEntries[0][1]} ครั้ง`;
+  } else {
+    document.getElementById('riskCauseName').textContent = '-';
+    document.getElementById('riskCauseValue').textContent = 'ไม่มีข้อมูลสาเหตุ';
+  }
+}
+
+/* ============================= RENDER: CATEGORY CHART + CAUSES ============================= */
+function renderCatChart(data){
+  const ctx = document.getElementById('catChart');
+  const emptyEl = document.getElementById('catEmpty');
+  if(data.length===0){
+    ctx.style.display='none'; emptyEl.style.display='block';
+    if(catChart){ catChart.destroy(); catChart=null; }
+    return;
+  }
+  ctx.style.display='block'; emptyEl.style.display='none';
+  const agg = aggregates(data);
+  const entries = Object.entries(agg.byCat).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(catChart) catChart.destroy();
+  catChart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels: entries.map(e=>e[0]), datasets:[{ data: entries.map(e=>e[1]), backgroundColor:'#2f6fed', borderRadius:5, maxBarThickness:22 }]},
+    options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{ticks:{precision:0}}} }
+  });
+}
+
+function renderCauseList(data){
+  const agg = aggregates(data);
+  const entries = Object.entries(agg.byCause).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const max = entries.length ? entries[0][1] : 1;
+  const el = document.getElementById('causeList');
+  if(entries.length===0){ el.innerHTML = '<div class="empty-state" style="padding:16px;">ไม่มีข้อมูลสาเหตุ</div>'; return; }
+  el.innerHTML = entries.map(([cause,count])=>`
+    <div class="cause-row">
+      <div class="cname">${esc(cause)}</div>
+      <div class="cause-bar-bg"><div class="cause-bar-fill" style="width:${(count/max*100)}%"></div></div>
+      <div class="cn">${count}</div>
+    </div>`).join('');
+}
+
+/* ============================= FILTERS ============================= */
+function populateFilters(){
+  const agg = aggregates(RAW);
+  const catSel = document.getElementById('catFilter');
+  const prevCat = catSel.value;
+  catSel.innerHTML = '<option value="">ทุกประเภทอุปกรณ์</option>' + Object.keys(agg.byCat).sort().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  catSel.value = prevCat;
+
+  const probs = [...new Set(RAW.map(r=>r.problem_category).filter(Boolean))].sort();
+  const probSel = document.getElementById('probFilter');
+  const prevProb = probSel.value;
+  probSel.innerHTML = '<option value="">ทุก Problem Category</option>' + probs.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
+  probSel.value = prevProb;
+
+  const calcSel = document.getElementById('calcCategory');
+  calcSel.innerHTML = '<option value="">— เลือก / พิมพ์เอง —</option>' + Object.keys(agg.byCat).sort().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+}
+
+function setRamFilter(dim){
+  ramFilter = dim;
+  document.querySelectorAll('#ramFilterRow .fbtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-dim')===dim));
+  applyFilters();
+}
+document.querySelectorAll('#ramFilterRow .fbtn').forEach(b=>b.addEventListener('click', ()=>setRamFilter(b.getAttribute('data-dim'))));
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('catFilter').addEventListener('change', applyFilters);
+document.getElementById('probFilter').addEventListener('change', applyFilters);
+
+function applyFilters(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const catF = document.getElementById('catFilter').value;
+  const probF = document.getElementById('probFilter').value;
+  VISIBLE = RAW.filter(r=>{
+    if(ramFilter!=='all' && r.ramPrimary!==ramFilter) return false;
+    if(catF && r.equipCategory!==catF) return false;
+    if(probF && r.problem_category!==probF) return false;
+    if(q){
+      const blob = [r.code,r.description,r.cause,r.department,r.equipCategory].join(' ').toLowerCase();
+      if(!blob.includes(q)) return false;
+    }
+    return true;
+  });
+  renderTable();
+  renderCatChart(VISIBLE);
+  renderCauseList(VISIBLE);
+}
+
+/* ============================= RENDER: TABLE ============================= */
+function renderTable(){
+  const tbody = document.getElementById('recordsBody');
+  if(VISIBLE.length===0){
+    tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><div class="big">📭</div>ไม่พบรายการที่ตรงกับตัวกรอง</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = VISIBLE.map(r=>{
+    const ramCls = RAM_CLASS[r.ramPrimary]||'mnt';
+    const ramSrcTag = r.ramSource==='auto' ? '<span class="src-tag">Auto</span>' : (r.ramSource==='manual' ? '<span class="src-tag">Manual</span>' : '<span class="src-tag">From file</span>');
+    const eqSrcTag = r.equipSource==='auto' ? '<span class="src-tag">Auto</span>' : (r.equipSource==='manual' ? '<span class="src-tag">Manual</span>' : '<span class="src-tag">From file</span>');
+    const catOptions = CAT_KEYS.concat([r.equipCategory]).filter((v,i,a)=>a.indexOf(v)===i);
+    return `<tr>
+      <td><b>${esc(r.code||'-')}</b></td>
+      <td>
+        <select class="cat-select" data-id="${r.id}">
+          ${catOptions.map(c=>`<option value="${esc(c)}" ${c===r.equipCategory?'selected':''}>${esc(c)}</option>`).join('')}
+        </select>
+        ${eqSrcTag}
+      </td>
+      <td class="desc-cell">${esc(r.description||'-')}</td>
+      <td>
+        <select class="ram-select" data-id="${r.id}">
+          ${['Reliability','Availability','Maintainability'].map(d=>`<option value="${d}" ${d===r.ramPrimary?'selected':''}>${d}</option>`).join('')}
+        </select>
+        <span class="badge ${ramCls}" style="margin-top:4px;">${esc(r.ramSub)}</span>
+        ${ramSrcTag}
+      </td>
+      <td>${esc(r.problem_category||'-')}</td>
+      <td>${esc(r.department||'-')}</td>
+      <td><button class="view-btn" data-id="${r.id}">ดู</button></td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.cat-select').forEach(sel=>{
+    sel.addEventListener('change', function(){
+      const rec = RAW.find(r=>r.id===this.getAttribute('data-id'));
+      if(rec){ rec.equipCategory = this.value; rec.equipSource='manual'; refreshAfterEdit(); }
+    });
+  });
+  tbody.querySelectorAll('.ram-select').forEach(sel=>{
+    sel.addEventListener('change', function(){
+      const rec = RAW.find(r=>r.id===this.getAttribute('data-id'));
+      if(rec){ rec.ramPrimary = this.value; rec.ramSub='Manually set'; rec.ramSource='manual'; refreshAfterEdit(); }
+    });
+  });
+  tbody.querySelectorAll('.view-btn').forEach(btn=>{
+    btn.addEventListener('click', function(){ openModal(this.getAttribute('data-id')); });
+  });
+}
+
+function refreshAfterEdit(){
+  renderKpis(); renderRamPanel(); renderInsights(); populateFilters();
+  applyFilters();
+}
+
+/* ============================= MODAL ============================= */
+function openModal(id){
+  const r = RAW.find(x=>x.id===id);
+  if(!r) return;
+  const body = document.getElementById('modalBody');
+  const fields = [
+    ['รหัส', r.code], ['Equipment Group', r.equipment_group], ['Component (raw)', r.component],
+    ['ประเภทอุปกรณ์ (จัดแล้ว)', r.equipCategory + (r.equipSource!=='from file' ? ` — ${r.equipSource}`:'')],
+    ['รายละเอียด', r.description], ['Problem Category', r.problem_category], ['Cause', r.cause], ['Remedy', r.remedy],
+    ['หน่วยงาน', r.department],
+    ['RAM Dimension', r.ramPrimary + ' / ' + r.ramSub + ` (${r.ramSource})`],
+    ['Sheet ต้นทาง', r.sheet]
+  ];
+  body.innerHTML = fields.filter(f=>f[1]).map(f=>`<div class="mrow"><div class="mk">${esc(f[0])}</div><div class="mv">${esc(f[1])}</div></div>`).join('')
+    + '<div class="mrow"><div class="mk">คอลัมน์ทั้งหมดในไฟล์</div><div class="mv">' +
+      Object.entries(r.raw).map(([k,v])=>`<div style="margin-bottom:4px;"><b>${esc(k)}:</b> ${esc(v)}</div>`).join('') + '</div></div>';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+document.getElementById('modalCloseBtn').addEventListener('click', ()=>document.getElementById('modalOverlay').classList.remove('open'));
+document.getElementById('modalOverlay').addEventListener('click', e=>{ if(e.target.id==='modalOverlay') e.currentTarget.classList.remove('open'); });
+
+/* ============================= FILE UPLOAD ============================= */
+document.getElementById('fileInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const data = new Uint8Array(evt.target.result);
+      const wb = XLSX.read(data, {type:'array'});
+      ingestWorkbook(wb);
+    }catch(err){ alert('ไม่สามารถอ่านไฟล์ได้: '+err.message); }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value = '';
+});
+
+/* ============================= SAMPLE DATA ============================= */
+function sampleRows(){
+  return [
+    {Component:'LV_AC/DCBoard', Code:'L301', Description:'Breaker สวิทซ์ตกบ่อย', Problem_Category:'Equipment Error', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'Waiting', Department:'กบอ.', RAM_Classification:'Reliability / LV Distribution'},
+    {Component:'LV_Fprotection', Code:'L302', Description:'Battery ชุดตู้ Fire control เสื่อมสภาพ', Problem_Category:'Equipment Error', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'Waiting', Department:'กบอ.', RAM_Classification:'Maintainability / Battery'},
+    {Component:'', Code:'L303', Description:'หม้อแปลงไฟฟ้ามีคราบน้ำมันรั่วซึมที่ฐาน', Problem_Category:'Oil leak', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'ตรวจสอบซีล', Department:'กฟผ.', RAM_Classification:''},
+    {Component:'ETC', Code:'L304', Description:'งานตรวจสอบแล้ว รอจัดซื้ออะไหล่', Problem_Category:'Waiting', Cause:'Waiting', Remedy:'ETC', Department:'กบอ.', RAM_Classification:'Maintainability (Logistics Delay / MLD)'},
+    {Component:'LV_Fprotection', Code:'L305', Description:'Nitrogen รั่ว', Problem_Category:'Gas leak', Cause:'Nitrogen รั่วซึม', Remedy:'Waiting', Department:'กบอ.', RAM_Classification:'Availability / Gas Leakage'},
+    {Component:'', Code:'L306', Description:'มอเตอร์ปั๊มน้ำมันหล่อลื่นมีเสียงดังผิดปกติ', Problem_Category:'Equipment Error', Cause:'การทำงานผิดพลาดของอุปกรณ์', Remedy:'ตรวจสอบตลับลูกปืน', Department:'กบอ.', RAM_Classification:''},
+    {Component:'LV_AC/DCBoard', Code:'L307', Description:'DC board Breaker ชำรุด', Problem_Category:'Damaged', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'Waiting', Department:'กบอ.', RAM_Classification:'Reliability / LV Distribution'},
+    {Component:'', Code:'L308', Description:'สายเคเบิลแรงต่ำมีรอยแตกร้าวของฉนวน', Problem_Category:'Damaged', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'เปลี่ยนสายเคเบิล', Department:'กบอ.', RAM_Classification:''},
+    {Component:'LV_Fprotection', Code:'L309', Description:'Priming tank มีสนิมภายในมาก', Problem_Category:'Corrosion', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'Waiting', Department:'กบอ.', RAM_Classification:'Maintainability / Corrosion'},
+    {Component:'', Code:'L310', Description:'รีเลย์ป้องกันไม่ทำงานเมื่อทดสอบ Trip Test', Problem_Category:'Equipment Error', Cause:'การทำงานผิดพลาดของอุปกรณ์', Remedy:'สอบเทียบใหม่', Department:'กบอ.', RAM_Classification:''},
+    {Component:'ETC', Code:'L311', Description:'งานตรวจสอบแล้ว ไม่มีอะไหล่ และไม่มีผลกระทบ', Problem_Category:'Waiting', Cause:'Waiting', Remedy:'ETC', Department:'กบอ.', RAM_Classification:'Availability (No-Impact Log)'},
+    {Component:'', Code:'L312', Description:'พัดลมระบายความร้อนหม้อแปลงหยุดทำงาน', Problem_Category:'Equipment Error', Cause:'เสื่อมสภาพจากอายุใช้งาน (Aging and Fatigue)', Remedy:'เปลี่ยนพัดลม', Department:'กบอ.', RAM_Classification:''}
+  ];
+}
+document.getElementById('sampleBtn').addEventListener('click', ()=>{
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sampleRows()), 'Sample');
+  ingestWorkbook(wb);
+});
+
+/* ============================= EXPORT ============================= */
+document.getElementById('exportExcelBtn').addEventListener('click', ()=>{
+  if(RAW.length===0) return;
+  const detail = RAW.map(r=>({
+    Code:r.code, EquipmentCategory:r.equipCategory, EquipCategorySource:r.equipSource,
+    Description:r.description, RAM_Primary:r.ramPrimary, RAM_Sub:r.ramSub, RAM_Source:r.ramSource,
+    Problem_Category:r.problem_category, Cause:r.cause, Remedy:r.remedy, Department:r.department, Sheet:r.sheet
+  }));
+  const agg = aggregates(RAW);
+  const catSummary = Object.entries(agg.byCat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({Equipment_Category:k, Count:v}));
+  const ramSummary = Object.entries(agg.byRam).map(([k,v])=>({RAM_Dimension:k, Count:v, Percent:RAW.length?+(v/RAW.length*100).toFixed(1):0}));
+  const causeSummary = Object.entries(agg.byCause).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({Cause:k, Count:v}));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(detail), 'Classified Records');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ramSummary), 'RAM Summary');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(catSummary), 'By Equipment Category');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(causeSummary), 'By Cause');
+  XLSX.writeFile(wb, 'RAM_Classified_Report.xlsx');
+});
+
+document.getElementById('exportPdfBtn').addEventListener('click', ()=>{
+  if(RAW.length===0) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const agg = aggregates(RAW);
+  doc.setFontSize(16); doc.text('RAM Insight - Auto-Classified Failure Log Brief', 14, 18);
+  doc.setFontSize(10); doc.setTextColor(100);
+  doc.text('Generated: ' + new Date().toLocaleString(), 14, 25);
+  doc.setFontSize(11); doc.setTextColor(20);
+  doc.text(`Total Records: ${RAW.length}  |  Reliability: ${agg.byRam.Reliability}  Availability: ${agg.byRam.Availability}  Maintainability: ${agg.byRam.Maintainability}`, 14, 34);
+
+  doc.autoTable({
+    startY: 40,
+    head: [['Equipment Category', 'Records']],
+    body: Object.entries(agg.byCat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k, v]),
+    styles:{ fontSize:9 }, headStyles:{ fillColor:[47,111,237] }
+  });
+  doc.save('RAM_Classified_Report.pdf');
+});
+
+/* ============================= QUICK CALCULATOR ============================= */
+document.getElementById('calcRunBtn').addEventListener('click', ()=>{
+  const mtbf = parseFloat(document.getElementById('calcMtbf').value);
+  const mttr = parseFloat(document.getElementById('calcMttr').value);
+  if(!isFinite(mtbf) || !isFinite(mttr) || (mtbf+mttr)===0){ alert('กรุณากรอก MTBF และ MTTR ให้ถูกต้อง'); return; }
+  const avail = mtbf/(mtbf+mttr)*100;
+  document.getElementById('calcValue').textContent = avail.toFixed(2)+'%';
+  document.getElementById('calcFormula').textContent = `A = ${mtbf} / (${mtbf} + ${mttr}) = ${avail.toFixed(2)}%`;
+});
+
+/* ============================= SIDEBAR NAV SCROLL-SPY ============================= */
+(function(){
+  const links = Array.from(document.querySelectorAll('.side-link'));
+  const sections = links.map(l => document.getElementById(l.getAttribute('data-nav'))).filter(Boolean);
+  if(!sections.length) return;
+  const setActive = (id) => links.forEach(l => l.classList.toggle('active', l.getAttribute('data-nav')===id));
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+})();
+
+/* ============================= INIT ============================= */
+function renderAll(){
+  renderKpis();
+  renderRamPanel();
+  renderInsights();
+  VISIBLE = RAW.slice();
+  renderTable();
+  renderCatChart(VISIBLE);
+  renderCauseList(VISIBLE);
+  document.getElementById('exportExcelBtn').disabled = RAW.length===0;
+  document.getElementById('exportPdfBtn').disabled = RAW.length===0;
+}
+renderAll();
+</script>
+</body>
+</html>
