@@ -1,0 +1,468 @@
+{
+ "_อ่านก่อน": "ไฟล์จับคู่ 'รหัสปัญหา' กับ 'ชิ้นส่วนในโมเดล 3D' แก้ไขได้ด้วย Notepad แล้วอัปโหลดทับ ไม่ต้องแก้โค้ด. status: fault=เสียปกติ(ไล่สีเหลือง→แดงตามจำนวนครั้ง) | waiting=รออะไหล่(สีเหลือง) | remote=อุปกรณ์อยู่ห้องควบคุม แสดงที่ตู้ | no_part=ไม่มีชิ้นส่วนในโมเดล แสดงเป็นข้อความ. targets=ชื่อชิ้นส่วนจากรายการ _ชิ้นส่วนที่ใช้ได้ ด้านล่าง หรือชื่อกลุ่มที่ขึ้นต้นด้วย @ (ดู aliases). ถ้า targets ว่าง = ไม่ระบายสี",
+ "version": 1,
+ "aliases": {
+  "@WHOLE": "*",
+  "@FANS": [
+   "Fan_L_N",
+   "Fan_L_P",
+   "Fan_R_N",
+   "Fan_R_P"
+  ],
+  "@BUSHINGS": [
+   "HV_Bushing_1",
+   "HV_Bushing_2",
+   "HV_Bushing_3",
+   "LV_Bushing_1",
+   "LV_Bushing_2",
+   "LV_Bushing_3",
+   "Neutral_Bushing"
+  ],
+  "@VALVES": [
+   "Oil_Drain_Valve_L",
+   "Oil_Drain_Valve_R",
+   "Oil_Service_Valve_0",
+   "Oil_Service_Valve_1",
+   "Oil_Service_Valve_2",
+   "Oil_Service_Valve_3"
+  ]
+ },
+ "codes": {
+  "T001": {
+   "description": "Counter Lightning Arrester ชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีชิ้นส่วน Lightning Arrester ในโมเดล"
+  },
+  "T002": {
+   "description": "Oil level gauge ชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "MOG",
+    "Oil_Level_Gauge"
+   ],
+   "note": ""
+  },
+  "T003": {
+   "description": "Oil temp ชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "OTI_Gauge"
+   ],
+   "note": ""
+  },
+  "T004": {
+   "description": "Silicagel เปลี่ยนสี/Air Breather ชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Breather"
+   ],
+   "note": ""
+  },
+  "T005": {
+   "description": "Winding temp ชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "WTI_Gauge"
+   ],
+   "note": ""
+  },
+  "T006": {
+   "description": "น้ำมันรั่วซึมด้านบนหม้อแปลง",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Tank_Lid"
+   ],
+   "note": "รั่วด้านบน → ฝาถัง"
+  },
+  "T007": {
+   "description": "น้ำมันรั่วซึมที่ Bushing หม้อแปลง",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@BUSHINGS"
+   ],
+   "note": "ทุกบุชชิ่ง (HV/LV/Neutral)"
+  },
+  "T008": {
+   "description": "น้ำมันรั่วซึมที่ Cable box",
+   "category": "Main Tank / Accessories",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีชิ้นส่วน Cable box ในโมเดล"
+  },
+  "T009": {
+   "description": "น้ำมันรั่วซึมที่ Radiator",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Radiator_L",
+    "Radiator_R"
+   ],
+   "note": ""
+  },
+  "T010": {
+   "description": "น้ำมันรั่วซึมที่จุดต่อ Pipe, valve",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Radiator_Piping",
+    "@VALVES"
+   ],
+   "note": ""
+  },
+  "T011": {
+   "description": "น้ำมันรั่วซึมที่บริเวณท่อ",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Radiator_Piping",
+    "Buchholz_Relay"
+   ],
+   "note": "ท่อน้ำมัน"
+  },
+  "T012": {
+   "description": "น้ำมันหม้อแปลงต่ำ",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "Conservator",
+    "MOG",
+    "Oil_Level_Gauge"
+   ],
+   "note": ""
+  },
+  "T013": {
+   "description": "Lightning Arrester หม้อแปลงชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีชิ้นส่วน Lightning Arrester ในโมเดล"
+  },
+  "T014": {
+   "description": "เปลี่ยน Lightning Arrester หม้อแปลงชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีชิ้นส่วน Lightning Arrester ในโมเดล"
+  },
+  "T015": {
+   "description": "เปลี่ยนหม้อแปลงชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@WHOLE"
+   ],
+   "note": "เกี่ยวกับทั้งหม้อแปลง"
+  },
+  "T016": {
+   "description": "หม้อแปลง Trip",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@WHOLE"
+   ],
+   "note": "เกี่ยวกับทั้งหม้อแปลง"
+  },
+  "T017": {
+   "description": "พัดลมหม้อแปลงชำรุด",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@FANS"
+   ],
+   "note": ""
+  },
+  "T018": {
+   "description": "เปลี่ยนพัดลมหม้อแปลง",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@FANS"
+   ],
+   "note": ""
+  },
+  "T019": {
+   "description": "พัดลมหม้อแปลงถอดไปซ่อม",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@FANS"
+   ],
+   "note": ""
+  },
+  "T020": {
+   "description": "พัดลมหม้อแปลงไม่ทำงาน",
+   "category": "Main Tank / Accessories",
+   "status": "fault",
+   "targets": [
+    "@FANS"
+   ],
+   "note": ""
+  },
+  "T021": {
+   "description": "งานตรวจสอบแล้ว รอจัดซื้ออะไหล่",
+   "category": "Main Tank / Accessories",
+   "status": "waiting",
+   "targets": [
+    "Tank_Structure"
+   ],
+   "note": "รออะไหล่ ไม่ระบุชิ้นส่วน — แสดงที่ตัวถังหลัก"
+  },
+  "T022": {
+   "description": "งานตรวจสอบแล้ว ไม่มีอะไหล่ และไม่มีผลกระทบต่อการจ่ายไฟ หรืออื่น ๆ ตามเห็นสมควร",
+   "category": "Main Tank / Accessories",
+   "status": "no_part",
+   "targets": [],
+   "note": "รหัสนี้เป็น Code F (เลิกใช้งานแล้ว)"
+  },
+  "T101": {
+   "description": "Control desk tap อ่านไม่ตรง",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T102": {
+   "description": "Control desk หลอดขาด",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T103": {
+   "description": "Control พัดลมชำรุด",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T104": {
+   "description": "Differential relay ชำรุด",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T105": {
+   "description": "Differential relay เปลี่ยน",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T106": {
+   "description": "Tripping relay ชำรุด",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T107": {
+   "description": "Tripping relay เปลี่ยน",
+   "category": "Control",
+   "status": "remote",
+   "targets": [
+    "Marshalling_Cabinet"
+   ],
+   "note": "อุปกรณ์จริงอยู่ในห้องควบคุม — แสดงที่ตู้ Marshalling"
+  },
+  "T206": {
+   "description": "Counter Tap ไม่ทำงาน",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Motor_Drive"
+   ],
+   "note": ""
+  },
+  "T208": {
+   "description": "Micro sw. Lower & upper limit ค้าง",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Motor_Drive"
+   ],
+   "note": ""
+  },
+  "T209": {
+   "description": "OLTC เปลี่ยน Tap ทางไฟฟ้าไม่ได้",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Motor_Drive",
+    "OLTC_Diverter_Chamber"
+   ],
+   "note": ""
+  },
+  "T210": {
+   "description": "น้ำมันรั่วซึมที่ฝาบ่อ OLTC",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Diverter_Chamber"
+   ],
+   "note": ""
+  },
+  "T211": {
+   "description": "เปลี่ยน Tap แล้วมีเสียงดัง",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Diverter_Chamber",
+    "OLTC_Motor_Drive"
+   ],
+   "note": ""
+  },
+  "T212": {
+   "description": "ระดับน้ำมันต่ำที่ OLTC",
+   "category": "OLTC",
+   "status": "fault",
+   "targets": [
+    "OLTC_Diverter_Chamber"
+   ],
+   "note": ""
+  },
+  "T213": {
+   "description": "งานตรวจสอบแล้ว รอจัดซื้ออะไหล่",
+   "category": "OLTC",
+   "status": "waiting",
+   "targets": [
+    "OLTC_Diverter_Chamber",
+    "OLTC_Motor_Drive"
+   ],
+   "note": "รออะไหล่ OLTC"
+  },
+  "T214": {
+   "description": "งานตรวจสอบแล้ว ไม่มีอะไหล่ และไม่มีผลกระทบต่อการจ่ายไฟ หรืออื่น ๆ ตามเห็นสมควร",
+   "category": "OLTC",
+   "status": "no_part",
+   "targets": [],
+   "note": "รหัสนี้เป็น Code F (เลิกใช้งานแล้ว)"
+  },
+  "T301": {
+   "description": "Counter oil filter ทำงานผิดปกติ",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีเครื่องกรองน้ำมัน (Oil Filter) ในโมเดล"
+  },
+  "T302": {
+   "description": "Motor oil filter หมุนกลับทาง",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีเครื่องกรองน้ำมัน (Oil Filter) ในโมเดล"
+  },
+  "T303": {
+   "description": "Oil filter unit มีน้ำมันรั่วซึม",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีเครื่องกรองน้ำมัน (Oil Filter) ในโมเดล"
+  },
+  "T304": {
+   "description": "Oil filter ไม่ทำงานหลังจากเปลี่ยน Tap",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีเครื่องกรองน้ำมัน (Oil Filter) ในโมเดล"
+  },
+  "T305": {
+   "description": "Pressure gauge oil filter เสีย",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "ไม่มีเครื่องกรองน้ำมัน (Oil Filter) ในโมเดล"
+  },
+  "T306": {
+   "description": "งานตรวจสอบแล้ว รอจัดซื้ออะไหล่",
+   "category": "Oil Filter",
+   "status": "waiting",
+   "targets": [],
+   "note": "รออะไหล่ — ไม่มีเครื่องกรองน้ำมันในโมเดล"
+  },
+  "T307": {
+   "description": "งานตรวจสอบแล้ว ไม่มีอะไหล่ และไม่มีผลกระทบต่อการจ่ายไฟ หรืออื่น ๆ ตามเห็นสมควร",
+   "category": "Oil Filter",
+   "status": "no_part",
+   "targets": [],
+   "note": "รหัสนี้เป็น Code F (เลิกใช้งานแล้ว)"
+  }
+ },
+ "_ชิ้นส่วนที่ใช้ได้": {
+  "Base_Frame": "แคร่ฐานและบ่ารับแม่แรง",
+  "Breather": "Silica-gel Breather",
+  "Buchholz_Relay": "รีเลย์บุคโฮลซ์และท่อเชื่อม",
+  "Bushing_CT": "CT ที่ฐานบุชชิ่ง",
+  "Conservator": "ถังพักน้ำมัน (Conservator)",
+  "Control_Cables": "สายสัญญาณป้องกันและสายไฟเลี้ยงพัดลม",
+  "Core": "แกนเหล็ก (Core)",
+  "Earthing_System": "ระบบต่อลงดิน",
+  "Fan_L_N": "พัดลมระบายความร้อนฝั่งซ้าย (ตัวหน้า)",
+  "Fan_L_P": "พัดลมระบายความร้อนฝั่งซ้าย (ตัวหลัง)",
+  "Fan_R_N": "พัดลมระบายความร้อนฝั่งขวา (ตัวหน้า)",
+  "Fan_R_P": "พัดลมระบายความร้อนฝั่งขวา (ตัวหลัง)",
+  "Front_Cover": "ผนังถังด้านหน้า (ฝาเปิดดูภายใน)",
+  "HV_Bushing_1": "บุชชิ่งแรงสูง 115 kV เฟส 1",
+  "HV_Bushing_2": "บุชชิ่งแรงสูง 115 kV เฟส 2",
+  "HV_Bushing_3": "บุชชิ่งแรงสูง 115 kV เฟส 3",
+  "HV_Winding_P1": "ขดลวดแรงสูง เฟส 1",
+  "HV_Winding_P2": "ขดลวดแรงสูง เฟส 2",
+  "HV_Winding_P3": "ขดลวดแรงสูง เฟส 3",
+  "Internal_Insulation": "ฉนวนภายในและวงแหวนเกลี่ยสนามไฟฟ้า",
+  "Internal_Leads": "สายตัวนำภายใน HV/LV",
+  "LV_Bushing_1": "บุชชิ่งแรงต่ำ 24 kV เฟส 1",
+  "LV_Bushing_2": "บุชชิ่งแรงต่ำ 24 kV เฟส 2",
+  "LV_Bushing_3": "บุชชิ่งแรงต่ำ 24 kV เฟส 3",
+  "LV_Winding_P1": "ขดลวดแรงต่ำ เฟส 1",
+  "LV_Winding_P2": "ขดลวดแรงต่ำ เฟส 2",
+  "LV_Winding_P3": "ขดลวดแรงต่ำ เฟส 3",
+  "Lifting_Lugs": "หูยกหม้อแปลง",
+  "MOG": "เกจระดับน้ำมันแบบแม่เหล็ก (MOG)",
+  "Marshalling_Cabinet": "ตู้ควบคุม Marshalling",
+  "Nameplate_Warning": "ป้ายพิกัดและป้ายเตือน",
+  "Neutral_Bushing": "บุชชิ่งนิวทรัล",
+  "OLTC_Diverter_Chamber": "ห้องสวิตช์ตัดต่อและชุดเลือกแท็ป OLTC",
+  "OLTC_Motor_Drive": "ตู้มอเตอร์ขับ OLTC และตัวแสดงผล",
+  "OTI_Gauge": "เกจและหัววัดอุณหภูมิน้ำมัน (OTI)",
+  "Oil_Drain_Valve_L": "วาล์วระบายน้ำมัน (ซ้าย)",
+  "Oil_Drain_Valve_R": "วาล์วระบายน้ำมัน (ขวา)",
+  "Oil_Fittings": "จุกเติม/ก๊อกเก็บตัวอย่างน้ำมัน/หน้าแปลนสุญญากาศ",
+  "Oil_Level_Gauge": "หลอดแก้วดูระดับน้ำมัน",
+  "Oil_Service_Valve_0": "วาล์วกรอง/เติมน้ำมัน ตัวที่ 1",
+  "Oil_Service_Valve_1": "วาล์วกรอง/เติมน้ำมัน ตัวที่ 2",
+  "Oil_Service_Valve_2": "วาล์วกรอง/เติมน้ำมัน ตัวที่ 3",
+  "Oil_Service_Valve_3": "วาล์วกรอง/เติมน้ำมัน ตัวที่ 4",
+  "Pressure_Relief_Device": "อุปกรณ์ระบายแรงดันฉุกเฉิน (PRD)",
+  "Radiator_L": "หม้อน้ำ (ครีบระบายความร้อน) ฝั่งซ้าย",
+  "Radiator_Piping": "ท่อน้ำมันและหน้าแปลนหม้อน้ำ",
+  "Radiator_R": "หม้อน้ำ (ครีบระบายความร้อน) ฝั่งขวา",
+  "Rear_Junction_Boxes": "กล่องรวมสายและรางสายด้านหลัง",
+  "Sudden_Pressure_Relay": "รีเลย์แรงดันเพิ่มฉับพลัน",
+  "Tank_Lid": "ฝาถังด้านบน",
+  "Tank_Structure": "ตัวถังหลัก (ผนัง ก้นถัง เหล็กเสริมแรง)",
+  "Tap_Winding": "ขดลวดแท็ปและสายแท็ป",
+  "WTI_Gauge": "เกจและหัววัดอุณหภูมิขดลวด (WTI)",
+  "Wheels": "ล้อหม้อแปลง",
+  "Winding_Clamping": "โครงอัดขดลวด"
+ }
+}
